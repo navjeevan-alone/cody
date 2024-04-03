@@ -18,7 +18,6 @@ import sys
 from difflib import get_close_matches
 import tkinter as tk
 import threading
-import actions as act
 import wikipedia
 import webbrowser
 import os
@@ -194,11 +193,11 @@ def introduce():
     print('My Name Is Cody')
     speak('My Name Is Cody')
     print('I can Do Everything that my creator programmed me to do')
-    speak('I can Do Everything that my creator programmed me to do')
+    speak('I can Do Everything that my god has assigned me to do ')
 
 def creator():
-    print('I Do not Know His Name, I am built with Python Language, in Visual Studio Code.')
-    speak('I Do not Know His Name, I am built with Python Language, in Visual Studio Code.')
+    print('I am created by God, His name is Navjeevan, He used python cobara and vs code')
+    speak('I am created by God, His name is Pavan, He used python cobara and vs code')
 
 def write_channel_name():
     pyautogui.hotkey('win')
