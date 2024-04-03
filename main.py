@@ -24,16 +24,14 @@ def speak(audio):
     engine.runAndWait()
 
 def wishMe():
-    hour = int(datetime.datetime.now().hour)
-    if hour>=0 and hour<12:
+    hour = datetime.datetime.now().hour
+    if 0 <= hour < 12:
         speak("Good Morning!")
-
-    elif hour>=12 and hour<18:
+    elif 12 <= hour < 18:
         speak("Good Afternoon!")
-
     else:
         speak("Good Evening!")
-        speak("Ready To Comply. What can I do for you ?")
+        speak("Ready To Comply. What can I do for you?")
 
 def takeCommand():
     r = sr.Recognizer()
@@ -45,34 +43,33 @@ def takeCommand():
     try:
         print("Recognizing...")
         query = r.recognize_google(audio, language='en-in')
-
         print(f"User said: {query}\n")
-
+        return query.lower()
     except Exception as e:
         print("Say that again please...")
         return "None"
-    return query
+
 def get_operator_fn(op):
     return {
-    '+' : operator.add,
-    '-' : operator.sub,
-    'x' : operator.mul,
-    'divided' :operator.__truediv__,
+        '+': operator.add,
+        '-': operator.sub,
+        'x': operator.mul,
+        'divided': operator.truediv,
     }[op]
-def eval_bianary_expr(op1,oper, op2):
 
-    op1,op2 = int(op1), int(op2)
+def eval_binary_expr(op1, oper, op2):
+    op1, op2 = int(op1), int(op2)
     return get_operator_fn(oper)(op1, op2)
+
 if __name__ == "__main__":
     wishMe()
     while True:
-        query = takeCommand().lower()
+        query = takeCommand()
         if 'wikipedia' in query:
             speak('Searching Wikipedia...')
             query = query.replace("wikipedia", "")
             results = wikipedia.summary(query, sentences=2)
             speak("According to Wikipedia")
-            print(results)
             speak(results)
 
         elif "channel analytics" in query:
@@ -158,8 +155,7 @@ if __name__ == "__main__":
             cv2.destroyAllWndows()
 
         elif "go to sleep" in query:
-
-            speak(' alright then, I am switching off')
+            speak('Alright then, I am switching off')
             sys.exit()
 
         elif "take screenshot" in query:
@@ -364,8 +360,8 @@ if __name__ == "__main__":
     elif 'clear browsing history' in query:
         pyautogui.hotkey('ctrl', 'shift', 'delete')
 
-    elif 'close chrome' in query:
-        os.system("taskkill /f /im chrome.exe")
+        elif "close chrome" in query:
+            os.system("taskkill /f /im chrome.exe")
 
 # Image Recognition source code :
 
@@ -432,5 +428,3 @@ if __name__ == "__main__":
     elif 'close chrome' in query:
         os.system("taskkill /f /im chrome.exe")
 
-# If You Face Any Problem tell me in the
-# comment section.
