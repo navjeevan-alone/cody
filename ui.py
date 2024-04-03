@@ -4,32 +4,14 @@ import speech_recognition as sr
 import datetime
 import wikipedia
 import webbrowser
-import os
-import random
-import cv2
 import pywhatkit as kit
-import sys
 import pyautogui
-import time
-import operator
-import requests
-import signal
 import sys
-from difflib import get_close_matches
 import tkinter as tk
 import threading
-import wikipedia
-import webbrowser
 import os
 import random
-import cv2
-import pywhatkit as kit
-import sys
-import pyautogui
-import datetime
-import pyttsx3
-import speech_recognition as sr
-import operator
+import cv2 
 import requests
 import time
 from difflib import get_close_matches
