@@ -19,22 +19,61 @@ import tkinter as tk
 import threading
 from queryList import queryList
 
-def test():
-    print("test success")
-
-def find_best_match(input_str, array_of_objects=queryList):
-    commands = [obj['command'] for obj in array_of_objects]
-    matches = get_close_matches(input_str, commands)
-    if matches:
-        best_match = matches[0]
-        index = commands.index(best_match)
-        return array_of_objects[index]['function']
-    else:
-        return None  # No match found
+# Setting Engine for speech
+def setEngine(start_engine=True):
+    if not start_engine:
+        return None
+    engine = pyttsx3.init('sapi5')
+    voices = engine.getProperty('voices')
+    engine.setProperty('voice', voices[1].id)
+    engine.setProperty('rate', 150)
+    return engine
 
 def speak(audio):
     engine.say(audio)
     engine.runAndWait()
+
+# GUI setup
+def set_gui():
+    global root, label, button
+    root = tk.Tk()
+    root.title("Voice Assistant")
+    root.geometry("400x200")
+
+    label = tk.Label(root, text="Listening...")
+    label.pack()
+
+    button = tk.Button(root, text="Start/Stop", command=toggle_listening)
+    button.pack()
+    toggle_listening()  # Start listening by default
+
+    root.mainloop()
+
+def update_label(text):
+    label.config(text=text)
+
+def toggle_listening():
+    global listening
+    if listening:
+        listening = False
+        update_label("Stopped Listening")
+    else:
+        listening = True
+        update_label("Listening...")
+        thread = threading.Thread(target=listen_loop)
+        thread.start()
+
+def listen_loop():
+    print("Started Listening :)")
+    while listening:
+        query = takeCommand().lower()
+        action = find_best_match(query)
+        if action is not None:
+            eval(action)
+        else:
+            print("No matching command or action found.")
+        time.sleep(max(2, len(query) // 5))
+    print("Stopped Listening :(")  # Optional: Print a message when listening stops
 
 def takeCommand():
     r = sr.Recognizer()
@@ -56,57 +95,35 @@ def takeCommand():
         update_label("Say that again please...")
         return "None"
 
-def setEngine(start_engine=True):
-    if not start_engine:
-        return None
-    engine = pyttsx3.init('sapi5')
-    voices = engine.getProperty('voices')
-    engine.setProperty('voice', voices[1].id)
-    engine.setProperty('rate', 150)
-    return engine
-
-def start_stop_listening():
-    global listening
-    if listening:
-        listening = False
-        update_label("Stopped Listening")
+def find_best_match(input_str, array_of_objects=queryList):
+    commands = [obj['command'] for obj in array_of_objects]
+    matches = get_close_matches(input_str, commands)
+    if matches:
+        best_match = matches[0]
+        index = commands.index(best_match)
+        return array_of_objects[index]['action']
     else:
+        return None  # No match found
+
+
+
+def test():
+    print("test success")
+
+def toggle_listening():
+    global listening
+    if not listening:
         listening = True
         update_label("Listening...")
         thread = threading.Thread(target=listen_loop)
         thread.start()
+        
+    else:
+        listening = False
+        update_label("Stopped Listening")
 
-def listen_loop():
-    while listening:
-        query = takeCommand().lower()
-        function = find_best_match(query)
-        if function is not None:
-            eval(function)
-        else:
-            print("No matching command or function found.")
-        time.sleep(max(2, len(query) // 5))
 
-def update_label(text):
-    label.config(text=text)
-
-def set_gui():
-    global root, label, button
-    root = tk.Tk()
-    root.title("Voice Assistant")
-    root.geometry("400x200")
-
-    label = tk.Label(root, text="Not Listening")
-    label.pack()
-
-    button = tk.Button(root, text="Start/Stop", command=start_stop_listening)
-    button.pack()
-
-    root.mainloop()
-
-# Define pyttsx3 engine
-engine = setEngine()
-
-# GUI setup
 if __name__ == "__main__":
-    listening =True
+    engine = setEngine()
+    listening =False
     set_gui()
