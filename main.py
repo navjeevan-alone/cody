@@ -40,7 +40,7 @@ def wishMe():
         speak("Good Afternoon!")
     else:
         speak("Good Evening!")
-    speak("Hi, Sir what  can I do for you?")
+    speak("Hi,calling from main")
 
 def takeCommand():
     r = sr.Recognizer()
@@ -128,13 +128,13 @@ if __name__ == "__main__":
             strTime = datetime.datetime.now().strftime("%H:%M:%S")
             speak(f"Sir, the time is {strTime}")
 
-        elif ("shutdown" and "system") in query:
+        elif ("shutdown system") in query:
             os.system("shutdown /s /t 5")
 
-        elif ("restart" and "system") in query:
+        elif ("restart system") in query:
             os.system("shutdown /r /t 5")
 
-        elif ("lock" and "system") in query:
+        elif ("lock system") in query:
             os.system("rundll32.exe powrprof.dll,SetSuspendState 0,1,0")
 
         elif "open notepad" in query:
