@@ -1,4 +1,3 @@
-from __future__ import with_statement
 import pyttsx3
 import speech_recognition as sr
 import datetime
@@ -13,6 +12,16 @@ import pyautogui
 import time
 import operator
 import requests
+import signal
+import sys
+
+
+def exit_on_ctrl_c(signal, frame):
+    print("\nExiting...")
+    sys.exit(0)
+
+def activate_exit_on_ctrl_c():
+    signal.signal(signal.SIGINT, exit_on_ctrl_c)
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -27,11 +36,11 @@ def wishMe():
     hour = datetime.datetime.now().hour
     if 0 <= hour < 12:
         speak("Good Morning!")
-    elif 12 <= hour < 18:
+    elif 12 <= hour < 24:
         speak("Good Afternoon!")
     else:
         speak("Good Evening!")
-        speak("Ready To Comply. What can I do for you?")
+    speak("Hi, Sir what  can I do for you?")
 
 def takeCommand():
     r = sr.Recognizer()
@@ -62,6 +71,7 @@ def eval_binary_expr(op1, oper, op2):
     return get_operator_fn(oper)(op1, op2)
 
 if __name__ == "__main__":
+    activate_exit_on_ctrl_c()
     wishMe()
     while True:
         query = takeCommand()
@@ -71,9 +81,6 @@ if __name__ == "__main__":
             results = wikipedia.summary(query, sentences=2)
             speak("According to Wikipedia")
             speak(results)
-
-        elif "channel analytics" in query:
-            webbrowser.open("https://studio.youtube.com/channel/UCxeYbp9rU_HuIwVcuHvK0pw/analytics/tab-overview/period-default")
 
         elif 'search on youtube' in query:
             query = query.replace("search on youtube", "")
@@ -177,7 +184,7 @@ if __name__ == "__main__":
                 print(my_string)
 
             speak("your result is")
-            speak(eval_bianary_expr(*(my_string.split())))
+            speak(eval_binary_expr(*(my_string.split())))
 
         elif "what is my ip address" in query:
             speak("Checking")
@@ -263,168 +270,89 @@ if __name__ == "__main__":
         elif 'type' in query:
             query = query.replace("type", "")
             pyautogui.write(f"{query}")
+        elif 'open chrome' in query:
+            os.startfile('C:\Program Files\Google\Chrome\Application\chrome.exe')
 
-# Chrome Automation Source Code :
+        elif 'maximize this window' in query:
+            pyautogui.hotkey('alt', 'space')
+            time.sleep(1)
+            pyautogui.press('x')
 
-import pyttsx3
-import speech_recognition as sr
-import pyautogui
-import time
-import os
+        elif 'google search' in query:
+            query = query.replace("google search", "")
+            pyautogui.hotkey('alt', 'd')
+            pyautogui.write(f"{query}", 0.1)
+            pyautogui.press('enter')
 
-engine = pyttsx3.init('sapi5')
-voices = engine.getProperty('voices')
-engine.setProperty('voice', voices[0].id)
-engine.setProperty('rate', 150)
+        elif 'youtube search' in query:
+            query = query.replace("youtube search", "")
+            pyautogui.hotkey('alt', 'd')
+            time.sleep(1)
+            pyautogui.press('tab')
+            pyautogui.press('tab')
+            pyautogui.press('tab')
+            pyautogui.press('tab')
+            time.sleep(1)
+            pyautogui.write(f"{query}", 0.1)
+            pyautogui.press('enter')
 
-def speak(audio):
-    engine.say(audio)
-    engine.runAndWait()
+        elif 'open new window' in query:
+            pyautogui.hotkey('ctrl', 'n')
 
-def takeCommand():
-    r = sr.Recognizer()
-    with sr.Microphone() as source:
-        print("Listening...")
-        r.pause_threshold = 1
-        audio = r.listen(source)
+        elif 'open incognito window' in query:
+            pyautogui.hotkey('ctrl', 'shift', 'n')
 
-    try:
-        print("Recognizing...")
-        query = r.recognize_google(audio, language='en-in')
-        print(f"User said: {query}\n")
+        elif 'minimise this window' in query:
+            pyautogui.hotkey('alt', 'space')
+            time.sleep(1)
+            pyautogui.press('n')
 
-    except Exception as e:
-        print("Say that again please...")
-        return "None"
-        return query
+        elif 'open history' in query:
+            pyautogui.hotkey('ctrl', 'h')
 
-if __name__ == "__main__":
-    while True:
-        query = takeCommand().lower()
+        elif 'open downloads' in query:
+            pyautogui.hotkey('ctrl', 'j')
 
-    if 'open chrome' in query:
-        os.startfile('C:\Program Files\Google\Chrome\Application\chrome.exe')
+        elif 'previous tab' in query:
+            pyautogui.hotkey('ctrl', 'shift', 'tab')
 
-    elif 'maximize this window' in query:
-        pyautogui.hotkey('alt', 'space')
-        time.sleep(1)
-        pyautogui.press('x')
+        elif 'next tab' in query:
+            pyautogui.hotkey('ctrl', 'tab')
 
-    elif 'google search' in query:
-        query = query.replace("google search", "")
-        pyautogui.hotkey('alt', 'd')
-        pyautogui.write(f"{query}", 0.1)
-        pyautogui.press('enter')
+        elif 'close tab' in query:
+            pyautogui.hotkey('ctrl', 'w')
 
-    elif 'youtube search' in query:
-        query = query.replace("youtube search", "")
-        pyautogui.hotkey('alt', 'd')
-        time.sleep(1)
-        pyautogui.press('tab')
-        pyautogui.press('tab')
-        pyautogui.press('tab')
-        pyautogui.press('tab')
-        time.sleep(1)
-        pyautogui.write(f"{query}", 0.1)
-        pyautogui.press('enter')
+        elif 'close window' in query:
+            pyautogui.hotkey('ctrl', 'shift', 'w')
 
-    elif 'open new window' in query:
-        pyautogui.hotkey('ctrl', 'n')
-
-    elif 'open incognito window' in query:
-      pyautogui.hotkey('ctrl', 'shift', 'n')
-
-    elif 'minimise this window' in query:
-        pyautogui.hotkey('alt', 'space')
-        time.sleep(1)
-        pyautogui.press('n')
-
-    elif 'open history' in query:
-        pyautogui.hotkey('ctrl', 'h')
-
-    elif 'open downloads' in query:
-        pyautogui.hotkey('ctrl', 'j')
-
-    elif 'previous tab' in query:
-        pyautogui.hotkey('ctrl', 'shift', 'tab')
-
-    elif 'next tab' in query:
-        pyautogui.hotkey('ctrl', 'tab')
-
-    elif 'close tab' in query:
-        pyautogui.hotkey('ctrl', 'w')
-
-    elif 'close window' in query:
-        pyautogui.hotkey('ctrl', 'shift', 'w')
-
-    elif 'clear browsing history' in query:
-        pyautogui.hotkey('ctrl', 'shift', 'delete')
+        elif 'clear browsing history' in query:
+            pyautogui.hotkey('ctrl', 'shift', 'delete')
 
         elif "close chrome" in query:
             os.system("taskkill /f /im chrome.exe")
+        elif 'open chrome' in query:
+            img = pyautogui.locateCenterOnScreen('Screenshot1.png') 
+            #[take a screenshot of chrome and crop it, then save the image in jarvis folder]
+            pyautogui.doubleClick(img)
+            time.sleep(1)
+            pyautogui.hotkey('alt', 'space')
+            time.sleep(1)
+            pyautogui.press('x')
+            time.sleep(1)
+            img1 = pyautogui.locateCenterOnScreen('screenshot2.png') 
+            #[take screenshot where you want to make the click]
+            pyautogui.click(img1)
+            time.sleep(2)
+            img2 = pyautogui.locateCenterOnScreen('screenshot3.png')
+            pyautogui.click(img2)
+            time.sleep(1)
+            pyautogui.typewrite('How To Manual',0.1)
+            pyautogui.press('enter')
+            time.sleep(1)
+            pyautogui.press('esc')
+            img3 = pyautogui.locateCenterOnScreen('screenshot4.png')
+            pyautogui.click(img3)
 
-# Image Recognition source code :
-
-import pyttsx3
-import speech_recognition as sr
-import pyautogui
-import time
-import os
-
-engine = pyttsx3.init('sapi5')
-voices = engine.getProperty('voices')
-engine.setProperty('voice', voices[0].id)
-engine.setProperty('rate', 150)
-
-def speak(audio):
-    engine.say(audio)
-    engine.runAndWait()
-
-def takeCommand():
-    r = sr.Recognizer()
-    with sr.Microphone() as source:
-        print("Listening...")
-        r.pause_threshold = 1
-        audio = r.listen(source)
-
-    try:
-        print("Recognizing...")
-        query = r.recognize_google(audio, language='en-in')
-        print(f"User said: {query}\n")
-
-    except Exception as e:
-        print("Say that again please...")
-        return "None"
-    return query
-
-if __name__ == "__main__":
-    while True:
-        query = takeCommand().lower()
-
-    if 'open chrome' in query:
-        img = pyautogui.locateCenterOnScreen('Screenshot1.png') 
-        #[take a screenshot of chrome and crop it, then save the image in jarvis folder]
-
-        pyautogui.doubleClick(img)
-        time.sleep(1)
-        pyautogui.hotkey('alt', 'space')
-        time.sleep(1)
-        pyautogui.press('x')
-        time.sleep(1)
-        img1 = pyautogui.locateCenterOnScreen('screenshot2.png') 
-        #[take screenshot where you want to make the click]
-        pyautogui.click(img1)
-        time.sleep(2)
-        img2 = pyautogui.locateCenterOnScreen('screenshot3.png')
-        pyautogui.click(img2)
-        time.sleep(1)
-        pyautogui.typewrite('How To Manual',0.1)
-        pyautogui.press('enter')
-        time.sleep(1)
-        pyautogui.press('esc')
-        img3 = pyautogui.locateCenterOnScreen('screenshot4.png')
-        pyautogui.click(img3)
-
-    elif 'close chrome' in query:
-        os.system("taskkill /f /im chrome.exe")
+        elif 'close chrome' in query:
+            os.system("taskkill /f /im chrome.exe")
 

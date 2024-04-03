@@ -1,0 +1,23 @@
+queryList = [
+    {"command": "wikipedia", "function": "search_wikipedia()"},
+    {"command": "search on youtube", "function": "search_youtube()"},
+    {"command": "open youtube", "function": "open_youtube()"},
+    {"command": "close chrome", "function": "close_chrome()"},
+    {"command": "open google", "function": "open_google()"},
+    {"command": "close google", "function": "close_google()"},
+    {"command": "play music", "function": "play_music()"},
+    {"command": "play iron man movie", "function": "play_ironman_movie()"},
+    {"command": "close movie", "function": "close_movie()"},
+    {"command": "time", "function": "get_current_time()"},
+    {"command": "shutdown system", "function": "shutdown_system()"},
+    {"command": "restart system", "function": "restart_system()"},
+    {"command": "lock system", "function": "lock_system()"},
+    {"command": "open notepad", "function": "open_notepad()"},
+    {"command": "close notepad", "function": "close_notepad()"},
+    {"command": "open command prompt", "function": "open_command_prompt()"},
+    {"command": "close command prompt", "function": "close_command_prompt()"},
+    {"command": "open camera", "function": "open_camera()"},
+    {"command": "go to sleep", "function": "go_to_sleep()"},
+    {"command": "take screenshot", "function": "take_screenshot()"},
+    {"command": "calculate", "function": "calculate()"}
+]
