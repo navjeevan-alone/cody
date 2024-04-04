@@ -385,6 +385,3 @@ if __name__ == "__main__":
     # engine = setEngine()
     listening =False
     set_gui()
-
-
-
