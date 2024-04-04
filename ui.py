@@ -6,8 +6,8 @@ import wikipedia
 import webbrowser
 import os
 import random
-import cv2
-import pywhatkit as kit
+# import cv2
+# import pywhatkit as kit
 import sys
 import pyautogui
 import time
@@ -17,23 +17,14 @@ import signal
 import sys
 from difflib import get_close_matches
 import tkinter as tk
-import threading
-import wikipedia
-import webbrowser
-import os
-import random
-import cv2
-import pywhatkit as kit
-import sys
-import pyautogui
-import datetime
-import pyttsx3
+import threading 
+import webbrowser 
+import datetime 
 import speech_recognition as sr
 import operator
 import requests
-import time
-from difflib import get_close_matches
-# from ui import speak,takeCommand 
+import pyaudio
+from difflib import get_close_matches 
 
 def search_wikipedia():
     speak('Searching Wikipedia...')
@@ -197,7 +188,7 @@ def introduce():
 
 def creator():
     print('I am created by God, His name is Navjeevan, He used python cobara and vs code')
-    speak('I am created by God, His name is Pavan, He used python cobara and vs code')
+    speak('I am created by God, His name is Navjeevan, He used python and speech to text')
 
 def write_channel_name():
     pyautogui.hotkey('win')
@@ -389,6 +380,7 @@ engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[1].id)
 engine.setProperty('rate', 150)
+
 if __name__ == "__main__":
     # engine = setEngine()
     listening =False
