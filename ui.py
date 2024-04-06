@@ -179,7 +179,7 @@ def introduce():
 
 def creator():
     print('I am created by God, His name is Navjeevan, He used python cobara and vs code')
-    speak('I am created by God, His name is Pavan, He used python cobara and vs code')
+    speak('I am created by God, His name is Navjeevan, He used python cobara and vs code')
 
 def write_channel_name():
     pyautogui.hotkey('win')
