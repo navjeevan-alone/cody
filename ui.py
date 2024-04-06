@@ -16,6 +16,17 @@ import requests
 import time
 from difflib import get_close_matches
 # from ui import speak,takeCommand 
+import screeninfo
+from tkinter import ttk
+import sv_ttk
+import constants 
+
+def set_screen_location():
+    for m in screeninfo.get_monitors():
+        x_pos,y_pos = m.width-(40+200),m.height-(40+200) 
+        print(m.width-(40+200),m.height-(40+200))
+        return x_pos,y_pos
+x_pos,y_pos = set_screen_location()
 
 def search_wikipedia():
     speak('Searching Wikipedia...')
@@ -277,19 +288,41 @@ def speak(audio):
 
 # GUI setup
 def set_gui():
-    global root, label, button
+    global root, label, button, close_button
     root = tk.Tk()
+    # This is where the magic happens
+    sv_ttk.set_theme("dark")
+    root.wm_attributes('-topmost', True) # always on top
+    root.resizable(False, False)  # This disables the window from being resized
+    root.overrideredirect(True)  # This removes the window decorations
+    root.configure(highlightcolor=constants.gray, highlightthickness=1,background=constants.dark)
+
+    # Function to move the window
+    def move_window(event):
+        root.geometry(f"+{event.x_root}+{event.y_root}")
+
+    # Bind mouse events for window movement
+    root.bind("<B1-Motion>", move_window)
+
+    # Hide close button until hovered over
+    close_button = ttk.Button(root, text='X', style='TButton', command=root.destroy)
+    # close_button2 = ttk.Button(root, text='X', style='TButton', command=root.destroy).pack()
+    close_button.place(relx=1.0, rely=0, anchor='ne')
+    close_button.bind('<Enter>', lambda event: close_button.config(style='Accent.TButton'))  # Change color on hover
+    close_button.bind('<Leave>', lambda event: close_button.config(style='TButton'))  # Restore color
+
     root.title("Voice Assistant")
-    root.geometry("400x200")
+    root.geometry(f"200x200+{x_pos}+40")  # Example position, replace with your desired position
 
-    label = tk.Label(root, text="Listening...")
-    label.pack()
+    label = ttk.Label(root, text="Listening...",font=("Inter",12),wraplength=160,background=constants.dark,foreground=constants.white)
+    label.pack(pady=(50, 20))
 
-    button = tk.Button(root, text="Start/Stop", command=toggle_listening)
+    button = ttk.Button(root, text="Start/Stop", style='Accent.TButton',command=toggle_listening)
     button.pack()
     toggle_listening()  # Start listening by default
 
     root.mainloop()
+
 
 def update_label(text):
     label.config(text=text)

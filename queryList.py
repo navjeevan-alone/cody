@@ -53,3 +53,29 @@ queryList = [
     {"command": "close window", "action": "close_window()"},
     {"command": "clear browsing history", "action": "clear_browsing_history()"},
 ]
+import tkinter as tk
+
+class TransparentWindow(tk.Tk):
+    def __init__(self):
+
+        tk.Tk.__init__(self)
+        self.overrideredirect(True)  # Remove window decorations
+        # self.attributes('-alpha', 0.8)  # Set transparency level (0.0 to 1.0)
+        self.configure(bg='blue')  # Set background color (optional)
+
+        # self.geometry('400x300')  # Set window size, replace with your desired size
+        self.resizable(False, False)  # Disable window resizing
+        print(self.winfo_screenwidth() )
+        print(self.winfo_screenheight() )
+        # Hide close button until hovered over
+        self.close_button = tk.Button(self, text='X', fg='white', command=self.destroy)
+        self.close_button.place(relx=1.0, rely=0, anchor='ne')
+        self.close_button.bind('<Enter>', lambda event: self.close_button.config(fg='white',bg="red"))  # Change color on hover
+        self.close_button.bind('<Leave>', lambda event: self.close_button.config(fg='white',bg=self['bg']))  # Restore color
+
+        self.lift()  # Bring the window to the front
+        self.attributes('-topmost', True)  # Keep the window always on top
+
+if __name__ == "__main__":
+    app = TransparentWindow()
+    app.mainloop()
